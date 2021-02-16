@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PortalController : MonoBehaviour
+public class Portal : MonoBehaviour
 {
     public string sceneName;
     public Transitioner transitioner;
@@ -29,7 +29,7 @@ public class PortalController : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
-            col.gameObject.GetComponent<PlayerController>().frozen = true;
+            col.gameObject.GetComponent<Player>().frozen = true;
             Debug.Log("SceneChange");
             transitioner.TransitionScene(sceneName);
         }

@@ -2,22 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class Player : MonoBehaviour
 {
     [Header("Stats:")]
-    public Vector2 movementDirection;
-    public float movementSpeed;
+    /*public Vector2 movementDirection;
+    public float movementSpeed;*/
 
     [Header("Properties:")]
-    public float addMovementSpeed = 1;
+    /*public float addMovementSpeed = 1;*/
     public bool frozen = false;
 
     [Header("Inserts:")]
     public Rigidbody2D rb;
     public Animator animator;
-    public Animator sword_animator;
+    //public Animator sword_animator;
     public GameObject director;
-    public GameObject weapon;
+    public Movement movement;
+    public Weapon sword;
 
     [Header("Prefabs:")]
     public GameObject fireBall;
@@ -30,15 +31,15 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ProcessInputs();
+        movement.ProcessInputs(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
         if (!frozen)
         {
-            Move();
+            movement.Move();
             Aim();
             if (Input.GetKey(KeyCode.Space)) {
-                sword_animator.SetBool("Attack", true);
+                sword.Attack(true);
             } else {
-                sword_animator.SetBool("Attack", false);
+                sword.Attack(false);
             }
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -47,33 +48,23 @@ public class PlayerController : MonoBehaviour
         }
         Animate();
     }
-    void ProcessInputs()
-    {
-        movementDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        movementSpeed = Mathf.Clamp(movementDirection.magnitude, 0.0f, 1.0f);
-        movementDirection.Normalize();
-    }
-    void Move()
-    {
-        rb.velocity = movementDirection * movementSpeed * addMovementSpeed;
-    }
     void Animate()
     {
-        if (movementDirection != Vector2.zero)
+        if (movement.direction != Vector2.zero)
         {
-            if (movementDirection.x != 0)
+            if (movement.direction.x != 0)
             {
-                animator.SetFloat("Horizontal", movementDirection.x);
+                animator.SetFloat("Horizontal", movement.direction.x);
             }
-            animator.SetFloat("Vertical", movementDirection.y);
+            //animator.SetFloat("Vertical", movement.direction.y);
         }
-        animator.SetFloat("Speed", movementSpeed);
+        animator.SetFloat("Speed", movement.speed);
     }
     void Aim() 
     {
-        if (movementDirection != Vector2.zero && movementDirection.x != 0) 
+        if (movement.direction != Vector2.zero && movement.direction.x != 0) 
         {
-            Vector2 directorDirection = new Vector2(movementDirection.x, 0);
+            Vector2 directorDirection = new Vector2(movement.direction.x, 0);
             directorDirection.Normalize();
             director.transform.localPosition = directorDirection;
         }

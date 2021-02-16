@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponController : MonoBehaviour
+public class Weapon : MonoBehaviour
 {
     public bool flipAtStart = false;
     public Sprite idleSprite;
@@ -17,6 +17,7 @@ public class WeaponController : MonoBehaviour
         {
             Flip();
         }
+        spriteChild.GetComponent<SpriteRenderer>().sprite = idleSprite;
     }
 
     // Update is called once per frame
@@ -26,6 +27,16 @@ public class WeaponController : MonoBehaviour
     }
     public void Flip()
     {
-        transform.Rotate(0f, 180f, 0f);
+        //transform.Rotate(0f, 180f, 0f);
+    }
+    public void Attack(bool attackBool)
+    {
+        if (attackBool)
+        {
+            spriteChild.GetComponent<SpriteRenderer>().sprite = attackSprite;
+        } else
+        {
+            spriteChild.GetComponent<SpriteRenderer>().sprite = idleSprite;
+        }
     }
 }
